@@ -3,37 +3,436 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Cài đặt ứng dụng</title>
+  <title>Danh sách ứng dụng</title>
   <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-      text-align: center;
-      margin-top: 50px;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
-    .button {
-      display: inline-block;
-      padding: 15px 25px;
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+      color: #333;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      animation: fadeInUp 0.8s ease-out;
+    }
+
+    .header h1 {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      background: linear-gradient(135deg, #007aff, #5856d6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .header p {
       font-size: 18px;
-      background-color: #007aff;
+      color: rgba(255, 255, 255, 0.9);
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 25px;
+      padding: 20px;
+    }
+
+    .app-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      animation: fadeInUp 0.8s ease-out;
+      animation-fill-mode: both;
+    }
+
+    .app-card:nth-child(1) { animation-delay: 0.1s; }
+    .app-card:nth-child(2) { animation-delay: 0.2s; }
+    .app-card:nth-child(3) { animation-delay: 0.3s; }
+    .app-card:nth-child(4) { animation-delay: 0.4s; }
+    .app-card:nth-child(5) { animation-delay: 0.5s; }
+    .app-card:nth-child(6) { animation-delay: 0.6s; }
+
+    .app-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .app-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 20px;
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+    }
+
+    .app-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 20px;
+    }
+
+
+
+    .platform-badge {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 15px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 15px;
+      letter-spacing: 0.5px;
+    }
+
+    .platform-badge.android {
+      background: linear-gradient(135deg, #3ddc84, #2bb673);
+      color: white;
+    }
+
+    .platform-badge.ios {
+      background: linear-gradient(135deg, #007aff, #5856d6);
+      color: white;
+    }
+
+    .app-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: #333;
+      text-align: center;
+    }
+
+    .app-description {
+      font-size: 16px;
+      color: #666;
+      margin-bottom: 20px;
+      line-height: 1.5;
+      text-align: center;
+    }
+
+
+
+    .app-features {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+    }
+
+    .feature-tag {
+      padding: 5px 12px;
+      background: rgba(0, 122, 255, 0.1);
+      color: #007aff;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .install-button {
+      display: block;
+      width: 100%;
+      padding: 15px 25px;
+      font-size: 16px;
+      font-weight: 600;
+      background: linear-gradient(135deg, #007aff, #5856d6);
       color: white;
       text-decoration: none;
-      border-radius: 8px;
+      border-radius: 50px;
+      box-shadow: 0 8px 20px rgba(0, 122, 255, 0.3);
+      transition: all 0.3s ease;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 10px;
     }
-    .note {
+
+    .install-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 25px rgba(0, 122, 255, 0.4);
+    }
+
+    .install-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .install-button:hover::before {
+      left: 100%;
+    }
+
+    .install-button.dev {
+      background: linear-gradient(135deg, #ff9500, #ff6b35);
+      box-shadow: 0 8px 20px rgba(255, 149, 0, 0.3);
+    }
+
+    .install-button.dev:hover {
+      box-shadow: 0 12px 25px rgba(255, 149, 0, 0.4);
+    }
+
+    .install-button.live {
+      background: linear-gradient(135deg, #34c759, #30d158);
+      box-shadow: 0 8px 20px rgba(52, 199, 89, 0.3);
+    }
+
+    .install-button.live:hover {
+      box-shadow: 0 12px 25px rgba(52, 199, 89, 0.4);
+    }
+
+    .install-button.aab {
+      background: linear-gradient(135deg, #ff6b35, #f7931e);
+      box-shadow: 0 8px 20px rgba(255, 107, 53, 0.3);
+    }
+
+    .install-button.aab:hover {
+      box-shadow: 0 12px 25px rgba(255, 107, 53, 0.4);
+    }
+
+    .button-group {
+      display: flex;
+      gap: 10px;
       margin-top: 20px;
-      font-size: 16px;
-      color: gray;
+      flex-wrap: wrap;
     }
+
+    .button-group .install-button {
+      flex: 1;
+      margin-bottom: 0;
+      min-width: 80px;
+    }
+
+
+
+    .note {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.8);
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      backdrop-filter: blur(10px);
+    }
+
+    .note b {
+      color: #fff;
+      font-weight: 600;
+    }
+
+          @media (max-width: 768px) {
+        .container {
+          grid-template-columns: 1fr;
+          padding: 10px;
+        }
+        
+        .header h1 {
+          font-size: 28px;
+        }
+        
+        .header p {
+          font-size: 16px;
+        }
+        
+        .app-card {
+          padding: 25px 20px;
+        }
+
+        .button-group {
+          flex-direction: column;
+        }
+      }
   </style>
 </head>
 <body>
-  <h1>Cài đặt ứng dụng iOS</h1>
-  <a
-    class="button"
-    href="itms-services://?action=download-manifest&url=https://download.icheck.com.vn/gbagame/AppDev.plist"
-  >
-    Nhấn vào đây để cài đặt
-  </a>
-  <p class="note">Vui lòng mở trang này bằng <b>Safari</b> trên iPhone</p>
+  <div class="header">
+    <h1>📱 Danh sách ứng dụng</h1>
+    <p>Chọn và cài đặt ứng dụng bạn muốn sử dụng</p>
+  </div>
+
+  <div class="container">
+    <!-- App 1: Blissland -->
+    <div class="app-card">
+      <div class="app-icon">
+        <img src="blissland_logo.png" alt="Blissland Logo">
+      </div>
+      <span class="platform-badge ios">iOS</span>
+      <h2 class="app-title">Blissland</h2>
+      <p class="app-description">Ứng dụng theo dõi giấc ngủ và thiền định với phân tích chi tiết, nhạc thư giãn và hướng dẫn thiền chuyên nghiệp</p>
+      <div class="app-features">
+        <span class="feature-tag">🌙 Giấc ngủ</span>
+        <span class="feature-tag">🧘 Thiền</span>
+        <span class="feature-tag">📊 Phân tích</span>
+      </div>
+      <div class="button-group">
+        <a class="install-button dev" href="itms-services://?action=download-manifest&url=https://download.icheck.com.vn/blissland/AppDev.plist">
+          🔧 Dev
+        </a>
+        <a class="install-button live" href="itms-services://?action=download-manifest&url=https://download.icheck.com.vn/blissland/AppLive.plist">
+          🚀 Live
+        </a>
+      </div>
+    </div>
+
+    <!-- App 2: Zentide -->
+    <div class="app-card">
+      <div class="app-icon">
+        <img src="zentide_logo.png" alt="Zentide Logo">
+      </div>
+      <span class="platform-badge android">Android</span>
+      <h2 class="app-title">Zentide</h2>
+      <p class="app-description">Ứng dụng thiền định và mindfulness với hướng dẫn chi tiết, nhạc thư giãn và theo dõi thói quen</p>
+      <div class="app-features">
+        <span class="feature-tag">🧘 Thiền</span>
+        <span class="feature-tag">🎵 Nhạc</span>
+        <span class="feature-tag">📈 Thói quen</span>
+      </div>
+      <div class="button-group android-buttons">
+        <a class="install-button dev" href="itms-services://?action=download-manifest&url=https://download.icheck.com.vn/zentide/AppDev.plist">
+          🔧 Dev
+        </a>
+        <a class="install-button live" href="itms-services://?action=download-manifest&url=https://download.icheck.com.vn/zentide/AppLive.plist">
+          🚀 Live
+        </a>
+        <a class="install-button aab" href="https://download.icheck.com.vn/zentide/app-release.aab">
+          📦 AAB
+        </a>
+      </div>
+    </div>
+
+    <!-- App 3: GBA Game -->
+    <div class="app-card">
+      <div class="app-icon">
+        <img src="gbagame_logo.png" alt="GBA Game Logo">
+      </div>
+      <span class="platform-badge ios">iOS</span>
+      <h2 class="app-title">GBA Game</h2>
+      <p class="app-description">Ứng dụng game GBA với nhiều tựa game cổ điển, hỗ trợ lưu game và tùy chỉnh điều khiển</p>
+      <div class="app-features">
+        <span class="feature-tag">🎮 Game</span>
+        <span class="feature-tag">💾 Lưu game</span>
+        <span class="feature-tag">🎯 Retro</span>
+      </div>
+      <div class="button-group">
+        <a class="install-button dev" href="itms-services://?action=download-manifest&url=https://download.icheck.com.vn/gbagame/AppDev.plist">
+          🔧 Dev
+        </a>
+        <a class="install-button live" href="itms-services://?action=download-manifest&url=https://download.icheck.com.vn/gbagame/AppLive.plist">
+          🚀 Live
+        </a>
+      </div>
+    </div>
+
+    <!-- App 4: Photo AI -->
+    <div class="app-card">
+      <div class="app-icon">
+        <img src="photoai_logo.png" alt="Photo AI Logo">
+      </div>
+      <span class="platform-badge android">Android</span>
+      <h2 class="app-title">Photo AI</h2>
+      <p class="app-description">Ứng dụng chỉnh sửa ảnh AI với các tính năng nâng cao: xóa background, tạo hiệu ứng, và tối ưu chất lượng</p>
+      <div class="app-features">
+        <span class="feature-tag">🤖 AI</span>
+        <span class="feature-tag">📸 Chỉnh sửa</span>
+        <span class="feature-tag">✨ Hiệu ứng</span>
+      </div>
+      <div class="button-group android-buttons">
+        <a class="install-button dev" href="itms-services://?action=download-manifest&url=https://download.icheck.com.vn/photoai/AppDev.plist">
+          🔧 Dev
+        </a>
+        <a class="install-button live" href="itms-services://?action=download-manifest&url=https://download.icheck.com.vn/photoai/AppLive.plist">
+          🚀 Live
+        </a>
+        <a class="install-button aab" href="https://download.icheck.com.vn/photoai/app-release.aab">
+          📦 AAB
+        </a>
+      </div>
+    </div>
+
+    <!-- App 5: KBoard -->
+    <div class="app-card">
+      <div class="app-icon">
+        <img src="kboard_logo.png" alt="KBoard Logo">
+      </div>
+      <span class="platform-badge ios">iOS</span>
+      <h2 class="app-title">KBoard</h2>
+      <p class="app-description">Bàn phím thông minh với gợi ý từ, tự động sửa lỗi, và hỗ trợ nhiều ngôn ngữ</p>
+      <div class="app-features">
+        <span class="feature-tag">⌨️ Bàn phím</span>
+        <span class="feature-tag">💡 Gợi ý</span>
+        <span class="feature-tag">🌍 Đa ngôn ngữ</span>
+      </div>
+      <div class="button-group">
+        <a class="install-button dev" href="itms-services://?action=download-manifest&url=https://download.icheck.com.vn/kboard/AppDev.plist">
+          🔧 Dev
+        </a>
+        <a class="install-button live" href="itms-services://?action=download-manifest&url=https://download.icheck.com.vn/kboard/AppLive.plist">
+          🚀 Live
+        </a>
+      </div>
+    </div>
+
+    <!-- App 6: Filter -->
+    <div class="app-card">
+      <div class="app-icon">
+        <img src="filter_logo.png" alt="Filter Logo">
+      </div>
+      <span class="platform-badge ios">iOS</span>
+      <h2 class="app-title">Filter</h2>
+      <p class="app-description">Ứng dụng lọc và chỉnh sửa ảnh với bộ lọc đẹp mắt, preset chuyên nghiệp và công cụ chỉnh sửa nâng cao</p>
+      <div class="app-features">
+        <span class="feature-tag">🎨 Lọc ảnh</span>
+        <span class="feature-tag">📱 Preset</span>
+        <span class="feature-tag">🛠️ Chỉnh sửa</span>
+      </div>
+      <div class="button-group">
+        <a class="install-button dev" href="itms-services://?action=download-manifest&url=https://download.icheck.com.vn/filter/AppDev.plist">
+          🔧 Dev
+        </a>
+        <a class="install-button live" href="itms-services://?action=download-manifest&url=https://download.icheck.com.vn/filter/AppLive.plist">
+          🚀 Live
+        </a>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
